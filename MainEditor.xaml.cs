@@ -35,7 +35,6 @@ namespace Insurgency_theater_editor
             LoadFileTree();
         }
 
-        /// DEV: all...
         private bool ParseText(string text)
         {
             try
@@ -49,6 +48,25 @@ namespace Insurgency_theater_editor
                 MessageBox.Show(e.Message);
                 return false;
             }
+        }
+        private string BuildText()
+        {
+            string newText;
+            if (token == null)
+            {
+                newText = new TextRange(TextViewer.Document.ContentStart, TextViewer.Document.ContentEnd).Text;
+            }
+            else
+            {
+                // DEV: Build string here
+                newText = new TextRange(TextViewer.Document.ContentStart, TextViewer.Document.ContentEnd).Text;
+            }
+            return newText;
+        }
+        // DEV: Add editor build code here
+        private void BuildEditor()
+        {
+
         }
 
         private void LoadTheater()
@@ -72,16 +90,16 @@ namespace Insurgency_theater_editor
             if (value == null)
                 return;
 
-            if (value == null) // DEV: add validate text change
+            string newText = BuildText();
+            if (newText.CompareTo(LastContent) != 0)
             {
                 MessageBoxResult result = MessageBox.Show("Save current file?", "Question", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        // DEV: save current file
+                        SaveCurrentFile();
                         break;
                     case MessageBoxResult.No:
-                        // DEV: discard current file
                         break;
                     case MessageBoxResult.Cancel:
                     default:
@@ -96,7 +114,8 @@ namespace Insurgency_theater_editor
             CurrentFileName = name;
             if (ParseText(text))
             {
-
+                BuildEditor();
+                TextViewer.Visibility = Visibility.Hidden;
             }
             else
             {
@@ -105,6 +124,7 @@ namespace Insurgency_theater_editor
                 Paragraph p = new Paragraph(new Run(text));
                 document.Blocks.Add(p);
                 TextViewer.Document = document;
+                TextViewer.Visibility = Visibility.Visible;
             }
 
             LastContent = text;
@@ -132,6 +152,14 @@ namespace Insurgency_theater_editor
                 FolderViewer.Items.Add(new Label() { Content = "_" + v });
             }
         }
+        private void SaveCurrentFile()
+        {
+            using(StreamWriter writer = new StreamWriter(Path.Combine(PFolder.FolderPath, CurrentFileName)))
+            {
+                string newText = BuildText();
+                writer.Write(newText);
+            }
+        }
 
         private void FolderViewer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -141,6 +169,11 @@ namespace Insurgency_theater_editor
         private void TheaterViewer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             LoadFileTree();
+        }
+
+        private void Button_SaveCurrentFile(object sender, RoutedEventArgs e)
+        {
+            SaveCurrentFile();
         }
     }
 }
