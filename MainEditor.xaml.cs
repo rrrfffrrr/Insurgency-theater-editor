@@ -17,7 +17,7 @@ namespace Insurgency_theater_editor
     public partial class MainEditor : Page
     {
         private static readonly string[] THEATEROPTIONS = { "<All>" };
-        private ProjectFolder PFolder;
+        private readonly ProjectFolder PFolder;
 
         public string CurrentFileName { get; set; }
         private string LastContent = null;
@@ -29,7 +29,7 @@ namespace Insurgency_theater_editor
         }
         public MainEditor(ProjectFolder folder) : this()
         {
-            this.PFolder = folder;
+            PFolder = folder;
             LoadTheater();
             TheaterViewer.SelectedIndex = 0;
             LoadFileTree();
