@@ -21,11 +21,11 @@ namespace Insurgency_theater_editor
 
         public string CurrentFileName { get; set; }
         private string LastContent = null;
+        private TheaterStructure token = null;
 
         public MainEditor()
         {
             InitializeComponent();
-            CurrentFileName = "File: ";
         }
         public MainEditor(ProjectFolder folder) : this()
         {
@@ -36,12 +36,19 @@ namespace Insurgency_theater_editor
         }
 
         /// DEV: all...
-        private FlowDocument ParseText(string text)
+        private bool ParseText(string text)
         {
-            FlowDocument document = new FlowDocument();
-            Paragraph p = new Paragraph(new Run(text));
-            document.Blocks.Add(p);
-            return document;
+            try
+            {
+                TheaterStructure tk = new TheaterStructure(text);
+                token = tk;
+                return true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
         }
 
         private void LoadTheater()
@@ -84,10 +91,22 @@ namespace Insurgency_theater_editor
 
             string name = value.Content.ToString().Substring(1);
             string file = Path.Combine(PFolder.FolderPath, name);
-            string text = File.ReadAllText(file);
+            string text = File.ReadAllText(file).Trim();
 
-            CurrentFileName = "File: " + name;
-            TextViewer.Document = ParseText(text);
+            CurrentFileName = name;
+            if (ParseText(text))
+            {
+
+            }
+            else
+            {
+                // Use plane text editor, so user can edit syntax errors.
+                FlowDocument document = new FlowDocument();
+                Paragraph p = new Paragraph(new Run(text));
+                document.Blocks.Add(p);
+                TextViewer.Document = document;
+            }
+
             LastContent = text;
         }
         /// <summary>
