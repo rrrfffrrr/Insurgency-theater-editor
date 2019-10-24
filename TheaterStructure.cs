@@ -16,22 +16,25 @@ namespace Insurgency_theater_editor
         public string Key { get; private set; }
         public string Value { get; private set; }
         public List<TheaterBlock> Childs { get; private set; }
+        public int Level { get; private set; }
 
         public int Type;
         public int Line;
 
-        public TheaterBlock(string key, string value)
+        public TheaterBlock(string key, string value, int level)
         {
             Key = key;
             Value = value;
             Childs = null;
+            Level = level;
             Line = Type = 0;
         }
-        public TheaterBlock(string key, IEnumerable<TheaterBlock> childs)
+        public TheaterBlock(string key, IEnumerable<TheaterBlock> childs, int level)
         {
             Key = key;
             Value = null;
             Childs = new List<TheaterBlock>(childs);
+            Level = level;
             Line = Type = 0;
         }
     }
@@ -117,7 +120,7 @@ namespace Insurgency_theater_editor
                             else
                             {
                                 string value = builder.ToString();
-                                TheaterBlock blk = new TheaterBlock(key, value);
+                                TheaterBlock blk = new TheaterBlock(key, value, stack.Count - 1);
                                 blk.Line = currentLine;
                                 stack.Peek().Add(blk);
                                 key = null;
@@ -132,7 +135,7 @@ namespace Insurgency_theater_editor
                             throw new Exception("Invalid syntax(" + currentLine + "): Cannot use brace as identifier.");
                         if (key == null)
                             throw new Exception("Invalid syntax(" + currentLine + "): No identifier for this collection found.");
-                        TheaterBlock block = new TheaterBlock(key, new List<TheaterBlock>());
+                        TheaterBlock block = new TheaterBlock(key, new List<TheaterBlock>(), stack.Count - 1);
                         block.Line = currentLine;
                         key = null;
                         stack.Peek().Add(block);
