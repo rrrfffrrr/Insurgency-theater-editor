@@ -1,0 +1,18 @@
+﻿<NavigationWindow x:Class="Insurgency_theater_editor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Insurgency_theater_editor"
+        mc:Ignorable="d"
+        Title="Insurgency theater editor" Height="480" Width="500"
+        ShowsNavigationUI="False">
+    <NavigationWindow.InputBindings>
+        <KeyBinding Key="Back" Command="NotACommand" />
+        <KeyBinding Key="Next" Command="NotACommand" />
+        <KeyBinding Key="BrowserBack" Command="NotACommand" />
+        <KeyBinding Key="BrowserForward" Command="NotACommand" />
+        <KeyBinding Key="Left" Modifiers="Alt" Command="NotACommand" />
+        <KeyBinding Key="Right" Modifiers="Alt" Command="NotACommand" />
+    </NavigationWindow.InputBindings>
+</NavigationWindow>
