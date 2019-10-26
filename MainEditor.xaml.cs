@@ -1,16 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Documents;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Insurgency_theater_editor
 {
+    using Content_preset;
     /// <summary>
     /// MainEditor.xaml에 대한 상호 작용 논리
     /// </summary>
@@ -22,6 +24,14 @@ namespace Insurgency_theater_editor
         public string CurrentFileName { get; set; }
         private string LastContent = null;
         private TheaterStructure token = null;
+        private CollectionPanel RootContent {
+            get {
+                return ContentView.Content as CollectionPanel;
+            }
+            set {
+                ContentView.Content = value;
+            }
+        }
 
         public MainEditor()
         {
@@ -49,6 +59,8 @@ namespace Insurgency_theater_editor
                 return false;
             }
         }
+
+        #region script builder
         private string BuildText()
         {
             string newText;
@@ -58,15 +70,167 @@ namespace Insurgency_theater_editor
             }
             else
             {
-                // DEV: Build string here
+                newText = BuildTextCollection(RootContent, 0);
             }
             return newText;
         }
-        // DEV: Add editor build code here
+        private string BuildTextCollection(CollectionPanel panel, int level)
+        {
+            StringBuilder newText = new StringBuilder();
+            for(int i = 0; i < level; ++i)
+            {
+                newText.Append("\t");
+            }
+            string indent = newText.ToString();
+            newText.Clear();
+
+            foreach (var i in panel.Data.Children)
+            {
+                CollectionPanel cp = i as CollectionPanel;
+                KeyValuePanel kvp = i as KeyValuePanel;
+
+                if (kvp != null)
+                {
+                    newText.Append(indent);
+                    newText.Append("\"");
+                    newText.Append(kvp.Data.Key);
+                    newText.Append("\"\t");
+                    newText.Append("\"");
+                    newText.Append(kvp.Data.Value);
+                    newText.Append("\"\n");
+                } 
+                else if (cp != null)
+                {
+                    newText.Append(indent);
+                    newText.Append("\"");
+                    newText.Append(cp.Header.SelectedValue as string);
+                    newText.Append("\"\n");
+                    newText.Append(indent);
+                    newText.Append("{\n");
+                    newText.Append(BuildTextCollection(cp, level + 1));
+                    newText.Append(indent);
+                    newText.Append("}\n");
+                }
+            }
+            return newText.ToString();
+        }
+        #endregion
+
+        #region Editor builder
         private void BuildEditor()
         {
+            RootContent.Data.Children.Clear(); // clear content before start to build
+            if (token == null)
+                return;
 
+            Stack<CollectionPanel> collections = new Stack<CollectionPanel>();
+            collections.Push(RootContent);
+            for (var iter = token.GetEnumerator(); iter.MoveNext();)
+            {
+                while (iter.Current.Level + 1 < collections.Count)
+                    collections.Pop();
+
+                var parent = collections.Peek().Data.Children;
+                if (iter.Current.IsContainer)
+                {
+                    string[] header_list = new string[] { iter.Current.Key, CollectionPanel.REMOVE_TEXT };
+                    int selectedIndex = 0;
+
+                    switch (collections.Count) {
+                        case 1:
+                            header_list = new string[] { "theater", CollectionPanel.REMOVE_TEXT };
+                            break;
+                        case 2:
+                            var list = new List<string>(TheaterStructure.CATEGORIS);
+                            list.Add(CollectionPanel.REMOVE_TEXT);
+                            header_list = list.ToArray();
+                            selectedIndex = list.FindIndex((s) => { return (s.CompareTo(iter.Current.Key) == 0); });
+                            break;
+                        default:
+                        break;
+                    }
+                    
+                    var cp = CreateCollectionPanel(header_list, parent);
+
+                    cp.Header.SelectedIndex = selectedIndex;
+
+                    switch (collections.Count)
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            cp.Header.IsEditable = true;
+                            break;
+                    }
+
+                    collections.Push(cp);
+                }
+                else
+                {
+                    bool restrictKey = false;
+                    switch (collections.Count)
+                    {
+                        case 1:
+                            if (iter.Current.Key.CompareTo("#base") == 0)
+                                restrictKey = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    var cp = CreateKeyValuePanel(iter.Current.Key, iter.Current.Value, parent);
+                    cp.key.Focusable = !restrictKey;
+                }
+            }
         }
+        /// <summary>
+        /// Create new key value panel
+        /// </summary>
+        /// <param name="key">key of panel</param>
+        /// <param name="value">value of panel</param>
+        /// <param name="parent">Add to parent and remove handler automatically if it's not null</param>
+        /// <param name="restrictKey">If true, disable interaction with key</param>
+        /// <returns></returns>
+        private KeyValuePanel CreateKeyValuePanel(string key, string value, UIElementCollection parent = null)
+        {
+            var panel = new KeyValuePanel();
+            panel.Data.Key = key;
+            panel.Data.Value = value;
+
+            if (parent != null)
+            {
+                parent.Add(panel);
+                panel.onRemoveRequested = (p) =>
+                {
+                    parent.Remove(p);
+                };
+            }
+
+            return panel;
+        }
+        /// <summary>
+        /// Create new collection panel
+        /// </summary>
+        /// <param name="header">Set header string, Editable when null passed, Removable collection must have "<Remove>" in header</Remove>"</param>
+        /// <param name="parent">Add to parent and remove handler automatically if it's not null</param>
+        /// <returns></returns>
+        private CollectionPanel CreateCollectionPanel(IList<string> header = null, UIElementCollection parent = null)
+        {
+            var panel = new CollectionPanel(header);
+
+            if (parent != null)
+            {
+                parent.Add(panel);
+                panel.onRemoveRequested = (p) =>
+                {
+                    parent.Remove(p);
+                };
+            }
+
+            return panel;
+        }
+        #endregion
 
         private void LoadTheater()
         {
@@ -113,6 +277,51 @@ namespace Insurgency_theater_editor
             CurrentFileName = name;
             if (ParseText(text))
             {
+                var cp = new CollectionPanel(new string[] { name });
+                RootContent = cp;
+
+                // override panel data
+                cp.ContentCreateButtion.Content = "Add new header";
+                cp.ContentCreateButtion.Click += (sender, e) =>
+                {
+                    var kvp = cp.Data.Children[cp.Data.Children.Count - 1] as KeyValuePanel;
+                    if (kvp != null)
+                    {
+                        cp.Data.Children.Remove(kvp);
+                        for (int i = 0; i < cp.Data.Children.Count; ++i)
+                        {
+                            if ((cp.Data.Children[i] as CollectionPanel) != null)
+                            {
+                                cp.Data.Children.Insert(i, kvp);
+                                break;
+                            }
+                        }
+                        if (!cp.Data.Children.Contains(kvp))
+                            cp.Data.Children.Add(kvp);
+                        kvp.Data.Key = "#base";
+                        kvp.Data.Value = "Make empty if want to remove.";
+                        kvp.key.Focusable = false;
+                    }
+                };
+                cp.CollectionCreateButtion.Content = "Add theater if not exist";
+                cp.CollectionCreateButtion.Click += (sender, e) =>
+                {
+                    var kvp = cp.Data.Children[cp.Data.Children.Count - 1] as CollectionPanel;
+                    if (kvp != null)
+                    {
+                        for (int i = 0; i < cp.Data.Children.Count - 1; ++i)
+                        {
+                            if ((cp.Data.Children[i] as CollectionPanel) != null)
+                            {
+                                cp.Data.Children.Remove(kvp);
+                                return;
+                            }
+                        }
+                        kvp.Header.ItemsSource = new string[] { "theater", CollectionPanel.REMOVE_TEXT};
+                        kvp.Header.IsEditable = false;
+                    }
+                };
+
                 BuildEditor();
                 TextViewer.Visibility = Visibility.Hidden;
             }
@@ -159,6 +368,7 @@ namespace Insurgency_theater_editor
                 writer.Write(newText);
             }
         }
+
 
         private void FolderViewer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
