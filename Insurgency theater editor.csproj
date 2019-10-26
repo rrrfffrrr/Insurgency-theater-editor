@@ -57,6 +57,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Content preset\CollectionPanel.xaml.cs">
+      <DependentUpon>CollectionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Content preset\KeyValuePanel.xaml.cs">
+      <DependentUpon>KeyValuePanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProjectFolder.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -67,6 +73,14 @@
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="TheaterStructure.cs" />
+    <Page Include="Content preset\CollectionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Content preset\KeyValuePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
