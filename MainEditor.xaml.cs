@@ -59,7 +59,6 @@ namespace Insurgency_theater_editor
             else
             {
                 // DEV: Build string here
-                newText = new TextRange(TextViewer.Document.ContentStart, TextViewer.Document.ContentEnd).Text;
             }
             return newText;
         }

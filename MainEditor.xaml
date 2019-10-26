@@ -28,100 +28,10 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding CurrentFileName,Mode=OneWay}"></TextBlock>
-            <Button Grid.Column="1" Margin="3" Click="Button_SaveCurrentFile">Save file</Button>
+            <Button Grid.Column="3" Grid.ColumnSpan="2" Margin="3" Click="Button_SaveCurrentFile">Save file</Button>
         </Grid>
         <TreeView Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Name="FolderViewer" MouseDoubleClick="FolderViewer_MouseDoubleClick"></TreeView>
-        <ScrollViewer Background="DarkGray" Grid.Column="2" Grid.Row="1" Margin="5" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
-            <StackPanel>
-                <Grid Margin="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="10"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" Text="Key"/>
-                <TextBlock Grid.Column="1" Text=":" TextAlignment="Center"/>
-                <TextBox Grid.Column="2" Text="Value"/>
-                </Grid><!--KeyValue-->
-                <Border Margin="5" BorderBrush="Black" BorderThickness="1"><!--Collection-->
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Button HorizontalAlignment="Left" Margin="0, 0, 2, 0">+</Button>
-                            <TextBox HorizontalAlignment="Left">Collection</TextBox>
-                        </StackPanel><!--Collection name-->
-                        <Grid Margin="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="10"></ColumnDefinition>
-                                <ColumnDefinition Width="2*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" Text="Key"/>
-                            <TextBlock Grid.Column="1" Text=":" TextAlignment="Center"/>
-                            <TextBox Grid.Column="2" Text="Value"/>
-                        </Grid><!--KeyValue-->
-                        <Grid Margin="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="10"></ColumnDefinition>
-                                <ColumnDefinition Width="2*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" Text="Key"/>
-                            <TextBlock Grid.Column="1" Text=":" TextAlignment="Center"/>
-                            <TextBox Grid.Column="2" Text="Value"/>
-                        </Grid>
-                        <!--KeyValue-->
-                        <Border Margin="5" BorderBrush="Black" BorderThickness="1">
-                            <!--Collection-->
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button HorizontalAlignment="Left" Margin="0, 0, 2, 0">+</Button>
-                                    <TextBox HorizontalAlignment="Left">Collection</TextBox>
-                                </StackPanel>
-                                <!--Collection name-->
-                                <Grid Margin="2">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                                        <ColumnDefinition Width="10"></ColumnDefinition>
-                                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Grid.Column="0" Text="Key"/>
-                                    <TextBlock Grid.Column="1" Text=":" TextAlignment="Center"/>
-                                    <TextBox Grid.Column="2" Text="Value"/>
-                                </Grid>
-                                <!--KeyValue-->
-                                <Grid Margin="2">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*"></ColumnDefinition>
-                                        <ColumnDefinition Width="10"></ColumnDefinition>
-                                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Grid.Column="0" Text="Key"/>
-                                    <TextBlock Grid.Column="1" Text=":" TextAlignment="Center"/>
-                                    <TextBox Grid.Column="2" Text="Value"/>
-                                </Grid>
-                                <!--KeyValue-->
-                                <Button Margin="2">+</Button>
-                            </StackPanel>
-                        </Border>
-                        <Button Margin="2">+</Button>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+        <ScrollViewer x:Name="ContentView" Background="DarkGray" Grid.Column="2" Grid.Row="1" Margin="5" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
         </ScrollViewer>
         <RichTextBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Name="TextViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Visibility="Hidden"></RichTextBox>
     </Grid>
