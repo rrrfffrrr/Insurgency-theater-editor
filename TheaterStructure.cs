@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Insurgency_theater_editor
 {
@@ -44,6 +45,8 @@ namespace Insurgency_theater_editor
         public static readonly string[] CATEGORIS = { "ammo", "explosives", "player_settings", "weapons", "weapon_upgrades", "player_gear", "player_templates", "core", "teams" };
 
         public List<TheaterBlock> Root;
+        public TimeSpan ParsingTimeSpan;
+
         public TheaterStructure()
         {
             Root = new List<TheaterBlock>();
@@ -76,8 +79,14 @@ namespace Insurgency_theater_editor
 
         public void Parse(string theater)
         {
+            Stopwatch FunctionTimer = new Stopwatch();
+            FunctionTimer.Start();
+
             Tokenize(theater);
             ValidateToken();
+
+            FunctionTimer.Stop();
+            ParsingTimeSpan = FunctionTimer.Elapsed;
         }
         public void Tokenize(string theater)
         {
