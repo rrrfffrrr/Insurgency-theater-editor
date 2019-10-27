@@ -384,5 +384,16 @@ namespace Insurgency_theater_editor
         {
             SaveCurrentFile();
         }
+
+        private void Button_CreateFile(object sender, RoutedEventArgs e)
+        {
+            string theater = Microsoft.VisualBasic.Interaction.InputBox("New theater file name.\nEnter exclude with extension.", "Theater name input box", "default");
+            using (var a = File.Create(Path.Combine(PFolder.FolderPath, theater + ".theater")))
+            {
+
+            }
+            PFolder.ReloadFiles();
+            LoadFileTree();
+        }
     }
 }
