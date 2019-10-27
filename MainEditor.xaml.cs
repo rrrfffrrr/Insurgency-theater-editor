@@ -254,7 +254,7 @@ namespace Insurgency_theater_editor
                 return;
 
             string newText = BuildText();
-            if (newText.CompareTo(LastContent) != 0)
+            if (LastContent != null && newText.CompareTo(LastContent) != 0)
             {
                 MessageBoxResult result = MessageBox.Show("Save current file?", "Question", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 switch (result)
