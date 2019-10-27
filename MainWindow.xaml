@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Insurgency_theater_editor"
         mc:Ignorable="d"
         Title="Insurgency theater editor" Height="480" Width="500"
-        ShowsNavigationUI="False">
+        ShowsNavigationUI="False"
+        Icon="wiki_y9t_icon.ico">
     <NavigationWindow.InputBindings>
         <KeyBinding Key="Back" Command="NotACommand" />
         <KeyBinding Key="Next" Command="NotACommand" />
