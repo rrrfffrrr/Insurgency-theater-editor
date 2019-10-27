@@ -157,6 +157,15 @@ namespace Insurgency_theater_editor
                     switch (collections.Count)
                     {
                         case 1:
+                            cp.OnCollectionCreated = (p) =>
+                            {
+                                var list = new List<string>(TheaterStructure.CATEGORIS);
+                                list.Add(CollectionPanel.REMOVE_TEXT);
+                                header_list = list.ToArray();
+                                p.Header.ItemsSource = header_list;
+                                p.Header.SelectedIndex = 0;
+                                p.Header.IsEditable = false;
+                            };
                             break;
                         case 2:
                             break;
@@ -388,10 +397,7 @@ namespace Insurgency_theater_editor
         private void Button_CreateFile(object sender, RoutedEventArgs e)
         {
             string theater = Microsoft.VisualBasic.Interaction.InputBox("New theater file name.\nEnter exclude with extension.", "Theater name input box", "default");
-            using (var a = File.Create(Path.Combine(PFolder.FolderPath, theater + ".theater")))
-            {
-
-            }
+            using (var fs = File.Create(Path.Combine(PFolder.FolderPath, theater + ".theater"))) {}
             PFolder.ReloadFiles();
             LoadFileTree();
         }
