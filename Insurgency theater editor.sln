@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insurgency theater editor", "Insurgency theater editor.csproj", "{CAD54D4D-34AA-42DD-9209-1DE4158E6483}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAD54D4D-34AA-42DD-9209-1DE4158E6483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD54D4D-34AA-42DD-9209-1DE4158E6483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD54D4D-34AA-42DD-9209-1DE4158E6483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD54D4D-34AA-42DD-9209-1DE4158E6483}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BB118BDD-1125-4993-9800-8AF23A357598}
+	EndGlobalSection
+EndGlobal
