@@ -161,8 +161,7 @@ namespace Insurgency_theater_editor
                             {
                                 var list = new List<string>(TheaterStructure.CATEGORIS);
                                 list.Add(CollectionPanel.REMOVE_TEXT);
-                                header_list = list.ToArray();
-                                p.Header.ItemsSource = header_list;
+                                p.Header.ItemsSource = list.ToArray();
                                 p.Header.SelectedIndex = 0;
                                 p.Header.IsEditable = false;
                             };
@@ -262,7 +261,7 @@ namespace Insurgency_theater_editor
             if (value == null)
                 return;
 
-            string newText = BuildText();
+            string newText = BuildText().Trim();
             if (LastContent != null && newText.CompareTo(LastContent) != 0)
             {
                 MessageBoxResult result = MessageBox.Show("Save current file?", "Question", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
